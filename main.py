@@ -27,12 +27,6 @@ def run(model_name, data_num, sahi=False):
     video_writer = cv2.VideoWriter(f"{'SAHI_' if sahi else ''}parking_{model_name}.avi", cv2.VideoWriter_fourcc(*"mp4v"), fps, (w, h))
     vid_name = f"{'SAHI_' if sahi else ''}parking_{model_name}.avi"
 
-    # parkingmanager = solutions.ParkingManagement(
-    #     model=f"models/{model_name}.pt",  # path to model file
-    #     json_file=f"{data_num}/bounding_boxes.json",
-    #     sahi_detection_model=detection_model
-    # )
-
     parkingmanager = ParkingHandle.ParkingManagement(        
         model=MODEL_DIR,  
         json_file=f"{DATA_DIR}/bounding_boxes.json",
@@ -61,7 +55,7 @@ def run(model_name, data_num, sahi=False):
     cap.release()
     video_writer.release()
     cv2.destroyAllWindows()  
-    os.system(f"mv {vid_name} predict/videos/{data_name}/")
+    os.system(f"mv {vid_name} predict_videos/{data_name}/")
 
     print("DA CHAY XONG")
 
