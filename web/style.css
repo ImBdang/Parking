@@ -1,0 +1,12 @@
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.map {
+    width: 910px;
+    height: 490px;
+    background-image: url("map.png");
+    background-repeat: no-repeat;
+}
