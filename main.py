@@ -66,4 +66,4 @@ def mark_point():
 
 # mark_point()
 
-run("gray_m", "2", False)
+run("cars", "7", False)
