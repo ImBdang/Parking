@@ -5,8 +5,29 @@ body {
 }
 
 .map {
+    position: relative;
     width: 910px;
     height: 490px;
     background-image: url("map.png");
     background-repeat: no-repeat;
+}
+
+.choices {
+    font-size: 35px;
+    margin-bottom: 50px;
+}
+
+.choices p{
+    margin: 0px;
+}
+
+.choices select{
+    font-size: 15px;
+    cursor: pointer;
+}
+
+#parkingCanvas {
+  width: 910px;
+  height: 490px;
+  display: block;
 }
