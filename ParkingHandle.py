@@ -273,20 +273,24 @@ class ParkingManagement(BaseSolution):
             self.extract_tracks(im0)  # Extract tracks from im0
             es, fs = len(self.json), 0  # Empty slots, filled slots
             annotator = SolutionAnnotator(im0, self.line_width)  # Initialize annotator
+            i = 0
             for region in self.json:
                 # Convert points to a NumPy array with the correct dtype and reshape properly
                 pts_array = np.array(region["points"], dtype=np.int32).reshape((-1, 1, 2))
                 rg_occupied = False  # Occupied region initialization
-                for box, cls in zip(self.boxes, self.clss):
-                    xc, yc = int((box[0] + box[2]) / 2), int((box[1] + box[3]) / 2)
-                    dist = cv2.pointPolygonTest(pts_array, (xc, yc), False)
-                    if dist >= 0:
-                        # cv2.circle(im0, (xc, yc), radius=self.line_width * 4, color=self.dc, thickness=-1)
-                        rg_occupied = True
+                self.capnhat(rg_occupied, i)
+                for box, cls in zip(self.boxes, self.clss): #Duyet qua list car duoc du doan
+                    xc, yc = int((box[0] + box[2]) / 2), int((box[1] + box[3]) / 2) #Xac dinh center của bounding box
+                    dist = cv2.pointPolygonTest(pts_array, (xc, yc), False) #Su dung ham co san cua opencv de so sanh 
+                    if dist >= 0: # Gia tri tra ve >=0 la truong hop ma bouding bõx car nam trong parking slot
+                        rg_occupied = True # Danh dau parking slot da duoc su dung
+                        self.capnhat(rg_occupied, i)
                         break
+                    
                 fs, es = (fs + 1, es - 1) if rg_occupied else (fs, es)
                 # Plot regions
                 cv2.polylines(im0, [pts_array], isClosed=True, color=self.occ if rg_occupied else self.arc, thickness=2)
+                i = i + 1
 
             self.pr_info["Cho da dung"], self.pr_info["Cho con trong"] = fs, es
 
@@ -313,3 +317,12 @@ class ParkingManagement(BaseSolution):
     
     def __call__(self, im0: np.ndarray) -> SolutionResults:
         return self.process(im0)
+    
+    def capnhat(self, status: bool, i: int):
+        with open("web/bounding_boxes.json", "r") as f:
+            data = json.load(f)
+
+        data[i]['st'] = status  
+
+        with open("web/bounding_boxes.json", "w") as f:
+            json.dump(data, f, indent=4)

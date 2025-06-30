@@ -48,8 +48,12 @@ def run(model_name, data_num, sahi=False):
             im0_processed = cv2.cvtColor(enhanced_hsv_im0, cv2.COLOR_HSV2BGR)
             # im0_processed = cv2.cvtColor(enhanced_hsv_im0, cv2.COLOR_GRAY2BGR)
             results = parkingmanager(im0_processed)
+            resized_img = cv2.resize(results.plot_im, (800, 600))  # thay (800, 600) bằng kích thước bạn muốn
+            cv2.imshow("Parking Detection", resized_img)
             # print(results)  # access the output
             video_writer.write(results.plot_im)  
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
             pbar.update(1) 
 
     cap.release()
@@ -66,4 +70,4 @@ def mark_point():
 
 # mark_point()
 
-run("cars", "7", False)
+run("train11s", "7", False)
