@@ -67,6 +67,7 @@ def mark_point():
     solutions.ParkingPtsSelection()
 
 
+ # python3 -m http.server 8080
 
 # mark_point()
 
